@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Productos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h1>Listado de productos</h1>
+
+  @if (loading) {
+  <div class="loading">
+    <ion-spinner></ion-spinner>
+    <p>Cargando productos...</p>
+  </div>
+  }
+
+  @if (error) {
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Error</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ error }}</p>
+      <ion-button (click)="loadProducts()">Reintentar</ion-button>
+    </ion-card-content>
+  </ion-card>
+  }
+
+  @if (!loading && !error) {
+  <p>Productos cargados: <strong>{{ products.length }}</strong></p>
+  <div class="table-container">
+    <ion-grid>
+      <ion-row>
+        @for (product of products; track product.id) {
+        <ion-col size="12" size-md="6" size-lg="4">
+          <ion-card>
+            <img [src]="product.thumbnail" [alt]="product.title"
+              style="height: 200px; object-fit: contain; width: 100%;" />
+            <ion-card-header>
+              <ion-card-title>{{ product.title }}</ion-card-title>
+              <ion-card-subtitle>{{ product.category }} - {{ product.brand }}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <p><strong>Precio:</strong> {{ product.price | currency:'EUR' }}</p>
+              <p><strong>Valoración:</strong> ⭐ {{ product.rating }}</p>
+              <p><strong>Stock:</strong> {{ product.stock }} unidades</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        }
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div class="ion-text-center ion-padding">
+    <ion-button (click)="paginaAnterior()" [disabled]="skip === 0">Anterior</ion-button>
+    <span> Página {{ (skip / limit) + 1 }} </span>
+    <ion-button (click)="paginaSiguiente()" [disabled]="skip + limit >= total">Siguiente</ion-button>
+  </div>
+  }
+</ion-content>
