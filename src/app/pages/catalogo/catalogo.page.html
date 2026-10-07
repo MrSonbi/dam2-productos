@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Catálogo de Fotos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (error) {
+  <ion-card color="danger">
+    <ion-card-header>
+      <ion-card-title>Fallo de Red</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>{{ error }}</ion-card-content>
+  </ion-card>
+  }
+
+  <p>Fotos cargadas: <strong>{{ photos.length }}</strong></p>
+
+  <div class="grid-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
+    @for (photo of photos; track photo.id) {
+    <ion-card>
+      <img [src]="photo.thumbnailUrl" [alt]="photo.title" style="height: 200px; object-fit: contain; width: 100%; padding: 10px;" />
+      <ion-card-header>
+        <ion-card-title style="font-size: 1.1rem;">{{ photo.title }}</ion-card-title>
+        <ion-card-subtitle>Álbum ID: {{ photo.albumId }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p style="font-weight: bold; font-size: 0.9rem; color: var(--ion-color-primary);">
+          ID: {{ photo.id }}
+        </p>
+        <p>
+          <a [href]="photo.url" target="_blank" rel="noopener noreferrer">Ver imagen completa</a>
+        </p>
+      </ion-card-content>
+    </ion-card>
+    }
+  </div>
+</ion-content>
